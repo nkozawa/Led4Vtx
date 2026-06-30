@@ -13,7 +13,7 @@ See (https://github.com/nkozawa/Led4Vtx/blob/main/img/LEDStrip.png) for a sample
 
 ### Led4Vtx.lua
 
-![Led4Vtx Screen](img/Led4vtx.jpg)
+![Led4Vtx Screen](img/Led4Vtx.jpg)
 
 #### Installation
 
@@ -31,7 +31,7 @@ Led4Vtx reads the `easyvtxch.fav` file created by EasyVTXch on startup.
 
 ### Led4VtxLite.lua
 
-![Led4VtxLite Screen](img/Led4vtxLite.jpg)
+![Led4VtxLite Screen](img/Led4VtxLite.jpg)
 
 #### Installation
 
@@ -64,7 +64,7 @@ F5,60,0,255
 
 ### Led4Vtx.lua
 
-![Led4Vtx画面](img/Led4vtx.jpg)
+![Led4Vtx画面](img/Led4Vtx.jpg)
 
 #### インストール
 
