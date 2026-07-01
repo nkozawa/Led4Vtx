@@ -1,0 +1,16 @@
+color 0 0,0,0
+color 1 0,255,255
+color 2 0,0,255
+color 3 30,0,255
+color 4 60,0,255
+color 5 90,0,255
+color 6 120,0,255
+color 7 150,0,255
+color 8 180,0,255
+color 9 210,0,255
+color 10 240,0,255
+color 11 270,0,255
+color 12 300,0,255
+color 13 330,0,255
+color 14 0,0,0
+color 15 0,0,0
