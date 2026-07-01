@@ -12,13 +12,13 @@ Please configure your drone's LED Strip settings to display arbitrary colors in 
 See (https://github.com/nkozawa/Led4Vtx/blob/main/img/LEDStrip.png) for a sample screen.
 
 Alternatively, you can paste the contents of `LED_Simple_Color.txt` directly into the Betaflight Configurator's CLI tab.
-Open the Betaflight Configurator, go to the **CLI** tab, paste the entire contents of `LED_Simple_Color.txt`, and press Enter.
+Open the Betaflight Configurator, go to the **CLI** tab, paste the entire contents of [LED_Simple_Color.txt](LED_Simple_Color.txt), and press Enter.
 This will apply the LED strip configuration (64 LEDs in a 16×4 grid with CT mode) without using the GUI.
 
 #### Notes
 
 - **Take it slow:** In the current version, rapid color switching (e.g., changing from red to blue immediately) may not work correctly. Please wait between operations.
-- **Restoring defaults:** This script sets all LED colors in the palette to the same color. To restore the default palette, paste the contents of `defaultPalette.txt` into the CLI tab.
+- **Restoring defaults:** This script sets all LED colors in the palette to the same color. To restore the default palette, paste the contents of [defaultPalette.txt](defaultPalette.txt) into the CLI tab.
 
 ### Led4Vtx.lua
 
@@ -72,13 +72,13 @@ F5,Yellow
 (https://github.com/nkozawa/Led4Vtx/blob/main/img/LEDStrip.png)にサンプル画面。
 
 あるいは、`LED_Simple_Color.txt`の内容をBetaflight ConfiguratorのCLIタブに貼り付けることもできます。
-Betaflight Configuratorを開き、**CLI**タブに移動して、`LED_Simple_Color.txt`の内容全体を貼り付け、Enterキーを押してください。
+Betaflight Configuratorを開き、**CLI**タブに移動して、[LED_Simple_Color.txt](LED_Simple_Color.txt)の内容全体を貼り付け、Enterキーを押してください。
 GUIを使わずにLED Strip設定（64個のLEDを16×4のグリッドでCTモードに設定）が適用されます。
 
 #### 注意点
 
 - **操作はゆっくりと：** 現在のバージョンでは、色の切り替え操作（例：赤から青へすぐに切り替え）が正しく動作しない場合があります。操作の間を置いてください。
-- **既定値への復元：** このスクリプトを使用すると、LEDのカラーパレットが全て同じ色に設定されます。既定値に戻す場合は、`defaultPalette.txt`の内容をCLIタブに貼り付けて実行してください。
+- **既定値への復元：** このスクリプトを使用すると、LEDのカラーパレットが全て同じ色に設定されます。既定値に戻す場合は、[defaultPalette.txt](defaultPalette.txt)の内容をCLIタブに貼り付けて実行してください。
 
 ### Led4Vtx.lua
 
