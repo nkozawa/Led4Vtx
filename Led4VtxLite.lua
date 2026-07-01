@@ -4,10 +4,10 @@
 -- 画面での登録・削除はなし (Led4Vtx.luaのお気に入り画面相当)。
 --
 -- led4vtxlite.fav フォーマット (各行 1エントリ):
---   VTXch,H,S,V
---   例: E2,0,0,255     (VTX=E2, H=0=Red)
---       E1,120,0,255   (VTX=E1, H=120=Green)
---       ,60,0,255      (VTXなし, H=60=Yellow)
+--   VTXch,ColorName
+--   例: E2,Red
+--       E1,Green
+--       ,Yellow        (VTXなし)
 
 -- MSPでLEDを制御し、VTXはELRS VTX Admin経由で切り替えます。
 --
@@ -623,63 +623,28 @@ local function startTransmission(entry)
 end
 
 -- =====================================
--- エントリのHSVからRGBを近似 (表示用)
--- rainbowColorsの定義値に一致すれば正確、それ以外は近似
+-- 色名から送信に使うHSV/RGBへ変換
 -- =====================================
-local knownColors = {
-  [0]   = {255, 0,   0},    -- Red
-  [30]  = {255, 128, 0},    -- Orange
-  [60]  = {255, 255, 0},    -- Yellow
-  [120] = {0,   255, 0},    -- Green
-  [180] = {0,   255, 255},  -- Cyan
-  [240] = {0,   0,   255},  -- Blue
-  [300] = {128, 0,   255},  -- Violet
+local namedColors = {
+  red =    { name = "Red",    h = 0,   s = 0, v = 255, rgb = {255, 0, 0} },
+  orange = { name = "Orange", h = 30,  s = 0, v = 255, rgb = {255, 128, 0} },
+  yellow = { name = "Yellow", h = 60,  s = 0, v = 255, rgb = {255, 255, 0} },
+  green =  { name = "Green",  h = 120, s = 0, v = 255, rgb = {0, 255, 0} },
+  cyan =   { name = "Cyan",   h = 180, s = 0, v = 255, rgb = {0, 255, 255} },
+  blue =   { name = "Blue",   h = 240, s = 0, v = 255, rgb = {0, 0, 255} },
+  violet = { name = "Violet", h = 300, s = 0, v = 255, rgb = {128, 0, 255} },
 }
 
-local knownNames = {
-  [0]   = "Red",    [30]  = "Orange", [60]  = "Yellow",
-  [120] = "Green",  [180] = "Cyan",   [240] = "Blue",
-  [300] = "Violet",
-}
-
-local function hsvToRgbApprox(h, s, v)
-  -- まず既知の色から探す
-  if knownColors[h] and s == 0 then
-    local r, g, b = knownColors[h][1], knownColors[h][2], knownColors[h][3]
-    -- v=255以外はスケール調整
-    if v ~= 255 then
-      r = math.floor(r * v / 255)
-      g = math.floor(g * v / 255)
-      b = math.floor(b * v / 255)
-    end
-    return r, g, b
-  end
-  -- 一般的なHSV→RGB変換
-  local r, g, b
-  if s == 0 then
-    r = v; g = v; b = v
-  else
-    local hi = math.floor(h / 60) % 6
-    local f  = (h / 60) - math.floor(h / 60)
-    local p  = math.floor(v * (255 - s) / 255)
-    local q  = math.floor(v * (255 - f * s) / 255)
-    local t  = math.floor(v * (255 - (1 - f) * s) / 255)
-    if     hi == 0 then r, g, b = v, t, p
-    elseif hi == 1 then r, g, b = q, v, p
-    elseif hi == 2 then r, g, b = p, v, t
-    elseif hi == 3 then r, g, b = p, q, v
-    elseif hi == 4 then r, g, b = t, p, v
-    else                r, g, b = v, p, q
-    end
-  end
-  return r, g, b
+local function getNamedColor(colorName)
+  if not colorName then return nil end
+  return namedColors[string.lower(colorName)]
 end
 
 -- =====================================
 -- led4vtxlite.fav の読み込み
 -- =====================================
--- フォーマット (各行): VTXch,H,S,V
---   例: E2,0,0,255  /  ,120,0,255 (VTXなし)
+-- フォーマット (各行): VTXch,ColorName
+--   例: E2,Red  /  ,Green (VTXなし)
 
 local entries = {}   -- { name, vtx, h, s, v, rgb={r,g,b} }
 
@@ -698,30 +663,24 @@ local function loadFav()
     -- trim
     line = string.match(line, "^%s*(.-)%s*$")
     if line ~= "" then
-      local vtxStr, hStr, sStr, vStr
-
-      -- パターン1: "Xn,H,S,V" (VTXch付き: アルファベット+数字)
-      vtxStr, hStr, sStr, vStr = string.match(line, "^([A-Za-z]%d),(%d+),(%d+),(%d+)$")
-
-      if not hStr then
-        -- パターン2: ",H,S,V" (VTXなし)
-        hStr, sStr, vStr = string.match(line, "^,(%d+),(%d+),(%d+)$")
+      local vtxStr, colorName = string.match(line, "^([A-Za-z]%d),([^,]+)$")
+      if not colorName then
+        colorName = string.match(line, "^,([^,]+)$")
         vtxStr = nil
       end
 
-      if hStr then
-        local h = tonumber(hStr)
-        local s = tonumber(sStr)
-        local v = tonumber(vStr)
-        if h and s and v then
-          local r, g, b = hsvToRgbApprox(h, s, v)
-          local name = knownNames[h] or ("H=" .. h)
+      if colorName then
+        colorName = string.match(colorName, "^%s*(.-)%s*$")
+        local color = getNamedColor(colorName)
+        if color then
           local vtxU = vtxStr and string.upper(vtxStr) or nil
           entries[#entries + 1] = {
-            name = name,
+            name = color.name,
             vtx  = vtxU,
-            h = h, s = s, v = v,
-            rgb = { r, g, b },
+            h = color.h,
+            s = color.s,
+            v = color.v,
+            rgb = { color.rgb[1], color.rgb[2], color.rgb[3] },
           }
         end
       end

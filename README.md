@@ -52,14 +52,14 @@ This version runs without configuration. If you prepare `led4vtxlite.fav` accord
 - Distributed `led4vtxlite.fav` content format:
 
 ```
-E2,0,0,255
-E1,120,0,255
-F3,240,0,255
-F5,60,0,255
+E2,Red
+E1,Green
+F3,Blue
+F5,Yellow
 ```
 
-- The first item is the VTX channel, followed by H, S, V values representing the color.
-- By changing only H (Hue), you can change the LED color.
+- The first item is the VTX channel, followed by the color name.
+- Available color names are `Red`, `Orange`, `Yellow`, `Green`, `Cyan`, `Blue`, and `Violet`.
 - In this example, from top to bottom: Red, Green, Blue, Yellow.
 
 ---
@@ -112,12 +112,12 @@ Led4VtxLite.luaとled4vtxlite.favファイルを`/SCRIPTS/TOOLS/`にコピーし
 - 配布される`led4vtxlite.fav`の内容形式:
 
 ```
-E2,0,0,255
-E1,120,0,255
-F3,240,0,255
-F5,60,0,255
+E2,Red
+E1,Green
+F3,Blue
+F5,Yellow
 ```
 
-- 最初の項目はVTXチャネル、続く3つの数字は色相(H)、彩度(S)、明度(V)を表す。
-- Hだけを変化させればLEDの色を変更できる。
-- この例では、上から赤、緑、青、黄となっている。
+- 最初の項目はVTXチャネル、2つ目の項目は色名です。
+- 指定できる色名は `Red`, `Orange`, `Yellow`, `Green`, `Cyan`, `Blue`, `Violet` です。
+- この例では、上から赤、緑、青、黄となっています。
